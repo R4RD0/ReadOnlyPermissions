@@ -42,7 +42,7 @@ function Ensure-BrokenInheritance($path) {
     return $false
 }
 
-# Function to process a folder and its subfolders
+# Function to process a folder, its subfolders, and files
 function Process-Folder($folderPath, $logPath, [ref]$dirCount) {
     Write-Host "Processing folder: $folderPath"
     
@@ -69,6 +69,18 @@ function Process-Folder($folderPath, $logPath, [ref]$dirCount) {
             Write-Host "Subfolder has broken inheritance, processing: $subfolder"
             Process-Folder -folderPath $subfolder -logPath $logPath -dirCount $dirCount
         }
+    }
+
+    # Process files in the current folder
+    Get-ChildItem -Path $folderPath -File | ForEach-Object {
+        $filePath = $_.FullName
+
+        # Log current permissions before making changes
+        $filePermissions = Get-CurrentPermissions -path $filePath
+        Log-Permissions -path $filePath -permissions $filePermissions -logPath $logPath
+        
+        # Ensure permissions are set for the file
+        Remove-WriteAndFullAccess -path $filePath
     }
 }
 
