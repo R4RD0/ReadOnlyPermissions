@@ -103,8 +103,8 @@ function Restore-Permissions($logPath) {
             $identity = $rule.IdentityReference
             $rights = [System.Security.AccessControl.FileSystemRights]$rule.FileSystemRights
             $type = [System.Security.AccessControl.AccessControlType]$rule.AccessControlType
-            $inheritanceFlags = [System.Security.AccessControl.InheritanceFlags]$rule.InheritanceFlags
-            $propagationFlags = [System.Security.AccessControl.PropagationFlags]$rule.PropagationFlags
+            #$inheritanceFlags = [System.Security.AccessControl.InheritanceFlags]$rule.InheritanceFlags
+            #$propagationFlags = [System.Security.AccessControl.PropagationFlags]$rule.PropagationFlags
 
             $ace = New-Object System.Security.AccessControl.FileSystemAccessRule($identity, $rights, $inheritanceFlags, $propagationFlags, $type)
             $acl.AddAccessRule($ace)
